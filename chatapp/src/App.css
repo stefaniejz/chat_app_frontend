@@ -1,0 +1,68 @@
+@import '~antd/dist/antd.css';
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#components-layout-demo-responsive .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+
+.ant-layout-header {
+  background: #fff;
+  padding-left: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.channel-header-name {
+  max-width: 100%;
+  display: inline-flex;
+  color: rgb(29, 28, 29);
+  font-weight: 900;
+}
+
+.channel-header-member {
+  color: rgb(29, 28, 29);
+  max-width: 100%;
+  display: inline-flex;
+  padding-left: 15px;
+}
+
+.channel-header-member .ant-btn-link {
+  color: rgb(29, 28, 29);
+}
+
+.comment-list .ant-comment-inner {
+  padding-top :2px;
+  padding-bottom :2px;
+  padding-left:8px;
+  padding-right:5px;
+}
