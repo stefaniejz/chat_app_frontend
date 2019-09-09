@@ -11,6 +11,7 @@ const { Header, Content, Footer, Sider } = Layout;
 class App extends Component {
   state={
     primaryViewHeight:"",
+    last_message_id:0,
     channels: [
       {
         id: 0,
@@ -84,6 +85,8 @@ class App extends Component {
       },
     ]
   }
+
+
   render() {
     return (
       <div className="App">
@@ -117,10 +120,47 @@ class App extends Component {
 
   componentDidMount = () => {
     window.addEventListener("resize", this.updatePrimaryViewHeight);
+    //change channel_id and last_message_id
+    fetch("http://localhost:3000/messages?channel_id=1&last_message_id=" + this.state.last_message_id)
+    .then(res=>res.json())
+    .then(data=>{
+     const comments = data.map(message=> {
+        return this.convertToComment(message)
+      })
+
+      console.log(data)
+
+      this.setState({
+         messages:[...this.state.messages, ...comments]
+      })
+    })
   }
 
   componentWillUnmount = () =>  {
     window.removeEventListener("resize", this.updatePrimaryViewHeight);
+  }
+
+  convertToComment = (message) => {
+    return  {
+      author: message.user.name,
+      avatar: message.user.avatar,
+      content: (
+        <p>
+         {message.content}
+        </p>
+      ),
+      datetime: (
+        <Tooltip
+          title={moment(message.created_at)
+            .format('YYYY-MM-DD HH:mm:ss')}
+        >
+          <span>
+            {moment(message.created_at)
+              .fromNow()}
+          </span>
+        </Tooltip>
+      ),
+    }
   }
 }
 
