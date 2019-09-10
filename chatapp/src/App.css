@@ -66,3 +66,21 @@
   padding-left:8px;
   padding-right:5px;
 }
+
+.direct-message-header-name {
+  max-width: 100%;
+  display: inline-flex;
+  color: rgb(29, 28, 29);
+  font-weight: 900;
+}
+
+.direct-message-header-avatar {
+  color: rgb(29, 28, 29);
+  max-width: 100%;
+  display: inline-flex;
+  padding-left: 15px;
+}
+
+.channel-header-member .ant-btn-link {
+  color: rgb(29, 28, 29);
+}

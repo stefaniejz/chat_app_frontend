@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import moment from 'moment';
 import './App.css';
 import { Layout, Menu, Icon, Input, Tooltip, Button } from 'antd';
 import Channel from './Channel'
 import ChannelList from './ChannelList'
+import moment from 'moment';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -14,96 +14,124 @@ class App extends Component {
     last_message_id:0,
     channels: [
       {
-        id: 0,
-        name: "Channel 1",
-        member_count: 11
-      },
-      {
         id: 1,
-        name: "Channel 2",
-        member_count: 12
+        name: "Channel 1",
+        member_count: 11,
+        channel_type: "group"
       },
       {
         id: 2,
-        name: "Channel 3",
-        member_count: 13
+        name: "Channel 2",
+        member_count: 12,
+        channel_type: "group"
       },
       {
         id: 3,
-        name: "Channel 4",
-        member_count: 14
+        name: "Channel 3",
+        member_count: 13,
+        channel_type: "group"
+      },
+      {
+        id: 4,
+        name: "Stephanie",
+        member_count: 1,
+        channel_type: "direct"
       }
-    ],
-    messages:[
-      {
-        author: 'Han Solo',
-        avatar: 'http://image.bee-ji.com/233220',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip
-            title={moment()
-              .subtract(1, 'days')
-              .format('YYYY-MM-DD HH:mm:ss')}
-          >
-            <span>
-              {moment()
-                .subtract(1, 'days')
-                .fromNow()}
-            </span>
-          </Tooltip>
-        ),
-      },
-      {
-        author: 'Han Solo',
-        avatar: 'https://www.ruan8.com/uploadimg/image/20190801/20190801162208_25373.jpg',
-        content: (
-          <p>
-            We supply a series of design principles, practical patterns and high quality design
-            resources (Sketch and Axure), to help people create their product prototypes beautifully and
-            efficiently.
-          </p>
-        ),
-        datetime: (
-          <Tooltip
-            title={moment()
-              .subtract(2, 'days')
-              .format('YYYY-MM-DD HH:mm:ss')}
-          >
-            <span>
-              {moment()
-                .subtract(2, 'days')
-                .fromNow()}
-            </span>
-          </Tooltip>
-        ),
-      },
     ]
-  }
+    // messages:[
+    //   {
+    //     author: 'Han Solo',
+    //     avatar: 'http://image.bee-ji.com/233220',
+    //     content: (
+    //       <p>
+    //         We supply a series of design principles, practical patterns and high quality design
+    //         resources (Sketch and Axure), to help people create their product prototypes beautifully and
+    //         efficiently.
+    //       </p>
+    //     ),
+    //     datetime: (
+    //       <Tooltip
+    //         title={moment()
+    //           .subtract(1, 'days')
+    //           .format('YYYY-MM-DD HH:mm:ss')}
+    //       >
+    //         <span>
+    //           {moment()
+    //             .subtract(1, 'days')
+    //             .fromNow()}
+    //         </span>
+    //       </Tooltip>
+    //     ),
+    //   },
+    //   {
+    //     author: 'Han Solo',
+    //     avatar: 'https://www.ruan8.com/uploadimg/image/20190801/20190801162208_25373.jpg',
+    //     content: (
+    //       <p>
+    //         We supply a series of design principles, practical patterns and high quality design
+    //         resources (Sketch and Axure), to help people create their product prototypes beautifully and
+    //         efficiently.
+    //       </p>
+    //     ),
+    //     datetime: (
+    //       <Tooltip
+    //         title={moment()
+    //           .subtract(2, 'days')
+    //           .format('YYYY-MM-DD HH:mm:ss')}
+    //       >
+    //         <span>
+    //           {moment()
+    //             .subtract(2, 'days')
+    //             .fromNow()}
+    //         </span>
+    //       </Tooltip>
+    //     ),
+    //   },
+    // ],
+    // directmessages: [
+    //   {
+    //     id: 0,
+    //     name: "Stephanie",
+    //     avatar:"https://pic.qqtn.com/up/2018-3/15222315731259519.jpg"
 
+    //   },
+    //   {
+    //     id: 1,
+    //     name: "Grace",
+    //     avatar:"http://n.sinaimg.cn/sinacn10112/513/w686h627/20190606/de67-hxyuaph9525998.jpg"
+    //   },
+    //   {
+    //     id: 2,
+    //     name: "Jack",
+    //     avatar:"https://www.qq745.com/uploads/allimg/170714/22-1FG4101U5E0.png"
+    //   },
+    //   {
+    //     id: 3,
+    //     name: "Brian",
+    //     avatar:"http://img.zz21.com/2015/0427/20150427110202176.jpg"
+    //   }
+    // ]
+  }
 
   render() {
     return (
       <div className="App">
         <Router>
+          <div>
           <Route exact path={`/channel/:channelId`} render={(routerProps)=>(
             <Layout style={{height:"100vh"}}>
                   <Sider width={150} trigger={null}>
                     <div className="logo" />
-                    <ChannelList {...routerProps} channels={this.state.channels}/>
+                    <ChannelList {...routerProps} channels={this.state.channels.filter(c => c.channel_type === "group")}
+                     directmessages={this.state.channels.filter(c => c.channel_type === "direct")}/>
                   </Sider>
                   <Channel {...routerProps}
                   primaryViewHeight={this.state.primaryViewHeight}
                   channels={this.state.channels}
-                  messages={this.state.messages}
-                  />
+                  />                 
             </Layout>
           )} />
+          </div>
         </Router>
       </div>
     );
@@ -120,46 +148,37 @@ class App extends Component {
 
   componentDidMount = () => {
     window.addEventListener("resize", this.updatePrimaryViewHeight);
-    //change channel_id and last_message_id
-    fetch("http://localhost:3000/messages?channel_id=1&last_message_id=" + this.state.last_message_id)
-    .then(res=>res.json())
+    this.getChannelFetch()
+  }
+   
+  getChannelFetch=()=>{
+    fetch("http://localhost:3000/channels?user_id=1").then(res=>res.json())
     .then(data=>{
-     const comments = data.map(message=> {
-        return this.convertToComment(message)
-      })
-
       console.log(data)
-
-      this.setState({
-         messages:[...this.state.messages, ...comments]
-      })
+       const channels= data.map(channel=>{
+         console.log(channel)
+         return this.convertToChannel(channel)
+       })
+       console.log(channels)
+       this.setState({
+         channels:channels
+       })
     })
+    
   }
 
   componentWillUnmount = () =>  {
     window.removeEventListener("resize", this.updatePrimaryViewHeight);
   }
 
-  convertToComment = (message) => {
-    return  {
-      author: message.user.name,
-      avatar: message.user.avatar,
-      content: (
-        <p>
-         {message.content}
-        </p>
-      ),
-      datetime: (
-        <Tooltip
-          title={moment(message.created_at)
-            .format('YYYY-MM-DD HH:mm:ss')}
-        >
-          <span>
-            {moment(message.created_at)
-              .fromNow()}
-          </span>
-        </Tooltip>
-      ),
+  convertToChannel = (channel) =>{
+    return {
+      id:channel.id,
+      name:channel.channel_type === "direct" ?  channel.members.filter(m => m.id != 1)[0].name : channel.name,
+      member_count:channel.member_count,
+      channel_type:channel.channel_type,
+      members:channel.members
+      
     }
   }
 }

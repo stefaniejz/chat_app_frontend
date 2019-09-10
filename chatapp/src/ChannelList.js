@@ -7,24 +7,39 @@ class ChannelList extends Component {
     handleClick=(item)=> {
        this.props.history.push(`/channel/${item.key}`);
     }
+
     render() {
-        return (<Menu inlineIndent={10} defaultOpenKeys={['channel']} theme="dark" 
+        return (<Menu inlineIndent={10} defaultOpenKeys={['channel', 'directmessage']} theme="dark" 
                 mode="inline" 
-                defaultSelectedKeys={['4']}
-                onClick={this.handleClick}
+                
                 >
-                <SubMenu key="channel" title="Channel">               
+                <SubMenu key="channel" title="Channels">               
                     {this.props.channels.map(channel=>{
-                        return (<Menu.Item key={channel.id}>
+                        return (<Menu.Item key={channel.id} onClick={this.handleClick}>
                             <Icon type="user" />
                             <span className="nav-text">{channel.name}</span>
                             </Menu.Item>);
                     })}
-                </SubMenu> 
+                </SubMenu>
+                <SubMenu key="directmessage" title="Direct Messages">               
+                    {this.props.directmessages.map(directmessage=>{
+                        return (<Menu.Item key={directmessage.id} onClick={this.handleClick}>
+                            <Icon type="user" />
+                            <span className="nav-text">{directmessage.name}</span>
+                            </Menu.Item>);
+                    })}
+                </SubMenu>
         </Menu>);
          
 
         
+    }
+
+    scrollToEnd=()=>{
+        let primaryViewDiv = document.getElementById('primaryView');
+        if (primaryViewDiv != null) {
+            primaryViewDiv.scrollTop = primaryViewDiv.scrollHeight;
+        }
     }
 }
 
