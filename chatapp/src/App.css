@@ -84,3 +84,32 @@
 .channel-header-member .ant-btn-link {
   color: rgb(29, 28, 29);
 }
+
+.login-form {
+  max-width: 400px;
+  padding-top:100px;
+  margin-left:200px;
+  margin-right:200px;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
+}
+
+.ant-form.ant-form-horizontal {
+  /* max-width: 500px;
+  margin-left:200px;
+  margin-right:100px; */
+  margin-left: auto;
+  margin-right:auto;
+  display: inline-block;
+  padding-top:100px;
+  min-width: 400px;
+}
+
+.center-form {
+  display: block;
+  text-align: center;
+}

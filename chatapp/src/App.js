@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
-import { Layout, Menu, Icon, Input, Tooltip, Button } from 'antd';
+import { Layout, Menu, Icon, Input, Tooltip, Button, Checkbox, Form} from 'antd';
 import Channel from './Channel'
 import ChannelList from './ChannelList'
 import moment from 'moment';
+import NormalLoginForm from './NormalLoginForm'
+import RegistrationForm from './RegistrationForm'
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -12,6 +14,7 @@ class App extends Component {
   state={
     primaryViewHeight:"",
     last_message_id:0,
+    jwt: null,
     channels: [
       {
         id: 1,
@@ -113,6 +116,9 @@ class App extends Component {
     // ]
   }
 
+  wrappedNormalLoginForm = Form.create({ name: 'normal_login' })(NormalLoginForm);
+  wrappedRegistrationForm = Form.create({ name: 'register' })(RegistrationForm);
+
   render() {
     return (
       <div className="App">
@@ -131,6 +137,17 @@ class App extends Component {
                   />                 
             </Layout>
           )} />
+          <Route exact path={"/login"} render={(routerProps)=>(
+             <div className="center-form">
+             
+             <this.wrappedNormalLoginForm onSaveJWT={this.saveJWT} />
+             </div>
+          )}/>
+          <Route exact path={"/register"} render={(routerProps)=>(
+             <div className="center-form">
+             <this.wrappedRegistrationForm/>
+             </div>
+          )}/>
           </div>
         </Router>
       </div>
@@ -154,12 +171,12 @@ class App extends Component {
   getChannelFetch=()=>{
     fetch("http://localhost:3000/channels?user_id=1").then(res=>res.json())
     .then(data=>{
-      console.log(data)
+      if (!Array.isArray(data)) {
+        return;
+      }
        const channels= data.map(channel=>{
-         console.log(channel)
          return this.convertToChannel(channel)
        })
-       console.log(channels)
        this.setState({
          channels:channels
        })
@@ -174,12 +191,18 @@ class App extends Component {
   convertToChannel = (channel) =>{
     return {
       id:channel.id,
-      name:channel.channel_type === "direct" ?  channel.members.filter(m => m.id != 1)[0].name : channel.name,
+      name:channel.channel_type === "direct" ?  channel.members.filter(m => m.id != 1)[0].username : channel.name,
       member_count:channel.member_count,
       channel_type:channel.channel_type,
       members:channel.members
       
     }
+  }
+
+  saveJWT = (jwt) => {
+    this.setState({
+      jwt: jwt
+    })
   }
 }
 

@@ -15,14 +15,16 @@ class ChannelList extends Component {
                 >
                 <SubMenu key="channel" title="Channels">               
                     {this.props.channels.map(channel=>{
+                        console.log(channel)
                         return (<Menu.Item key={channel.id} onClick={this.handleClick}>
-                            <Icon type="user" />
+                            <Icon type="team" />
                             <span className="nav-text">{channel.name}</span>
                             </Menu.Item>);
                     })}
                 </SubMenu>
                 <SubMenu key="directmessage" title="Direct Messages">               
                     {this.props.directmessages.map(directmessage=>{
+                        console.log(directmessage.name)
                         return (<Menu.Item key={directmessage.id} onClick={this.handleClick}>
                             <Icon type="user" />
                             <span className="nav-text">{directmessage.name}</span>

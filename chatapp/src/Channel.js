@@ -71,7 +71,6 @@ class Channel extends Component {
     }
 
   getMessageFetch=()=>{
-    console.log(this.last_message_ids)
     let last_message_id = this.last_message_ids[this.props.match.params.channelId];
     if (!last_message_id) {
       last_message_id = -1;
@@ -81,6 +80,10 @@ class Channel extends Component {
     fetch("http://localhost:3000/messages?channel_id=" + this.props.match.params.channelId + "&last_message_id=" + last_message_id)
     .then(res=>res.json())
     .then(data=>{
+      if (!Array.isArray(data)) {
+        return;
+      }
+
       data.map(message=> {
         if (last_message_id < message.id) {
         shouldScrollToEnd = true;
@@ -98,8 +101,6 @@ class Channel extends Component {
 
       this.last_message_ids[this.props.match.params.channelId] = last_message_id
 
-      console.log(this.all_messages)
-      console.log(this.last_message_ids)
 
       this.setState({
           messages:this.all_messages[this.props.match.params.channelId],
@@ -123,7 +124,7 @@ class Channel extends Component {
 
   convertToComment = (message) => {
     return  {
-      author: message.user.name,
+      author: message.user.username,
       avatar: message.user.avatar,
       channel_id: message.channel_id,
       content: (
