@@ -8,13 +8,16 @@ import moment from 'moment';
 import NormalLoginForm from './NormalLoginForm'
 import RegistrationForm from './RegistrationForm'
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout;;
+
 
 class App extends Component {
   state={
     primaryViewHeight:"",
     last_message_id:0,
     jwt: null,
+    users:[],
+    modalVisible:false,
     channels: [
       {
         id: 1,
@@ -129,12 +132,19 @@ class App extends Component {
                   <Sider width={150} trigger={null}>
                     <div className="logo" />
                     <ChannelList {...routerProps} channels={this.state.channels.filter(c => c.channel_type === "group")}
-                     directmessages={this.state.channels.filter(c => c.channel_type === "direct")}/>
+                     directmessages={this.state.channels.filter(c => c.channel_type === "direct")}
+                     onAddFriend={this.handleAddFriend}
+                     />
                   </Sider>
                   <Channel {...routerProps}
                   primaryViewHeight={this.state.primaryViewHeight}
                   channels={this.state.channels}
-                  />                 
+                  handleOk={this.handleOk}
+                  handleCancle={this.handleCancle}
+                  users={this.state.users}
+                  modalVisible={this.state.modalVisible}
+                  /> 
+                                 
             </Layout>
           )} />
           <Route exact path={"/login"} render={(routerProps)=>(
@@ -184,6 +194,21 @@ class App extends Component {
     
   }
 
+  handleAddFriend=()=>{
+    fetch("http://localhost:3000/users").then(r=>r.json())
+    .then(data=>{
+      const users=[]
+       data.map(user=>{
+         users.push(user)
+       })
+       this.setState({
+         users:users,
+         modalVisible:true
+       })
+    })
+    console.log("showmodal") 
+
+  }
   componentWillUnmount = () =>  {
     window.removeEventListener("resize", this.updatePrimaryViewHeight);
   }
@@ -198,12 +223,28 @@ class App extends Component {
       
     }
   }
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      modalVisible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      modalVisible: false,
+    });
+  };
+  
 
   saveJWT = (jwt) => {
     this.setState({
       jwt: jwt
     })
   }
+
+
 }
 
 export default App;

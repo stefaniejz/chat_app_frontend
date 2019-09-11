@@ -56,6 +56,8 @@
   padding-left: 15px;
 }
 
+
+
 .channel-header-member .ant-btn-link {
   color: rgb(29, 28, 29);
 }
@@ -112,4 +114,8 @@
 .center-form {
   display: block;
   text-align: center;
+}
+
+.add-friend {
+  padding-right:40px;
 }
