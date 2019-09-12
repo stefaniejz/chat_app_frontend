@@ -25,12 +25,21 @@ class NormalLoginForm extends React.Component {
             })
           })
             .then(r => r.json())
-            .then(console.log)
-
+            .then(data => {
+                console.log(data);
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                localStorage.setItem('jwt', data.jwt);
+                console.log(this.props)
+                this.props.history.push("/");
+            })
       }
     });
   };
-
+  handleLogin=()=>{
+    console.log("login")
+    //change channel id by current_user.channels.first.channel_id
+    this.props.history.push("/channel/1");
+  }
   render() {
     console.log(this.props)
     const { getFieldDecorator } = this.props.form;
@@ -68,7 +77,7 @@ class NormalLoginForm extends React.Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          Or <a href="/register">register now!</a>
         </Form.Item>
       </Form>
     );

@@ -71,7 +71,10 @@ import {
       }
       callback();
     };
-  
+    
+    handleRegister=()=>{
+     this.props.history.push("/login");
+    }
   
   
     render() {
@@ -148,7 +151,7 @@ import {
 
 
           <Form.Item {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button onClick={this.handleRegister} type="primary" htmlType="submit">
               Register
             </Button>
           </Form.Item>

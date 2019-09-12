@@ -1,27 +1,21 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Layout, Menu, Icon, Input, Tooltip, Button, Drawer, Modal} from 'antd';
+import { Layout, Menu, Icon, Input, Tooltip, Button, Drawer, Avatar} from 'antd';
 import MessageList from './MessageList'
 import moment from 'moment';
-
-
-
-
+import AddFriendModal from './AddFriendModel'
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Search } = Input;
 
 class Channel extends Component {
-
-
   constructor(props) {
     super(props);
     this.state = {content: '', 
-    messages: [],
-    visble:false,
-    members:[]
-
-  }
+      messages: [],
+      visble:false,
+      members:[]
+    }
 
     this.all_messages = {}
     this.last_message_ids = {}
@@ -59,10 +53,10 @@ class Channel extends Component {
 
   
   showDrawer = () => {
-  this.setState({
-    visible: true,
-  });
- };
+    this.setState({
+      visible: true,
+    });
+  };
 
   onClose = () => {
     this.setState({
@@ -70,73 +64,67 @@ class Channel extends Component {
     });
   };
 
-  // showModal = () => {
-  //   this.setState({
-  //     modalVisible: true,
-  //   });
-  // };
+    // showModal = () => {
+    //   this.setState({
+    //     modalVisible: true,
+    //   });
+    // };
 
-
-    render() {
-        let channelId = this.props.match.params.channelId;
-        let channel = this.props.channels.filter(c => c.id.toString() === channelId)[0];
-        
-      
-        return (
-            <Layout>
-            <Header className="channel-header">
-              <div className="channel-header-name">{channel.name}</div>
-              <div className="channel-header-member">
-                <Button onClick={this.showDrawer} type="link" block><Icon type="user" />{channel.member_count}</Button>
-              </div>      
-            </Header>
-            <Content>
-            <Modal
-              title="Users"
+  render() {
+      let channelId = this.props.match.params.channelId;
+      let channel = this.props.channels.filter(c => c.id.toString() === channelId)[0];
+      console.log(this.props)
+      return (
+          <Layout>
+          <Header className="channel-header">
+            { channel ? (<div><div className="channel-header-name">{channel.name}</div>
+                <div className="channel-header-member">
+                  <Button onClick={this.showDrawer} type="link" block><Icon type="user" />{channel.member_count}</Button>
+            </div></div>) : (<div></div>)}
+              
+          </Header>
+          <Content>
+            <AddFriendModal
+              title="Start Direct Message"
               visible={this.props.modalVisible}
               onOk={this.props.handleOk}
               onCancel={this.props.handleCancel}
-              okButtonProps={{ disabled: true }}
-              cancelButtonProps={{ disabled: true }}
               users={this.props.users}
-            >
-               {this.props.users.map(user=>{
-                 return <p>{user.username}</p>
-               })}
-              {/* <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p> */}
-            </Modal>
-              <div id="primaryView" style={{ padding: 10, background: '#fff', height: this.props.primaryViewHeight, overflowY: 'auto' }}>
-                <MessageList className="message-list" messages={this.state.messages}/>
-              </div>
-            </Content>
-            <Drawer
-            title= "Channel Members" 
-            placement="right"
-            closable={false}
-            onClose={this.onClose}
-            visible={this.state.visible}
-          >
-             {this.state.members.map(member=>{
-               return <p>{member.username} </p>
-             })}
-             
-         
-           </Drawer>           
-            <Input
-              size="large"
-              placeholder="Message"
-              prefix={<Icon type="message" />}
-              suffix={<Icon type="smile" theme="outlined" />}
-              onPressEnter={this.handleEnter}
-              onChange={this.handleInput}
-              value={this.state.content}
+              history={this.props.history}
+              refreshChannels={this.props.refreshChannels}
             />
-            {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
-          </Layout>
-        );
-    }
+            <div id="primaryView" style={{ padding: 10, background: '#fff', height: this.props.primaryViewHeight, overflowY: 'auto' }}>
+              <MessageList className="message-list" messages={this.state.messages}/>
+            </div>
+          </Content>
+          <Drawer
+          className="members-list"
+          title= "Channel Members" 
+          placement="right"
+          closable={false}
+          onClose={this.onClose}
+          visible={this.state.visible}
+        >
+            {this.state.members.map(member=>{
+              return <div>
+                <span><Avatar src={member.avatar} /></span>
+                <span>{member.username}</span> 
+              </div>
+            })}        
+          </Drawer>    
+          <Input
+            size="large"
+            placeholder="Message"
+            prefix={<Icon type="message" />}
+            suffix={<Icon type="smile" theme="outlined" />}
+            onPressEnter={this.handleEnter}
+            onChange={this.handleInput}
+            value={this.state.content}
+          />
+          {/* <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer> */}
+        </Layout>
+      );
+  }
 
   getMessageFetch=()=>{
     let last_message_id = this.last_message_ids[this.props.match.params.channelId];
@@ -184,6 +172,9 @@ class Channel extends Component {
   }
 
   getMembersFetch=()=> {
+    if (!this.props.match.params.channelId) {
+      return;
+    }
     fetch("http://localhost:3000/userchannels?channel_id=" + this.props.match.params.channelId ).then(r=>r.json())
     .then(data=>{
       const newmembers=[]

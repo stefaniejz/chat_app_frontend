@@ -68,6 +68,12 @@
   padding-left:8px;
   padding-right:5px;
 }
+.members-list .ant-avatar{
+   margin-top: 10px;
+   margin-right: 0px;
+   margin-bottom: 5px;
+   margin-left: 0px;
+}
 
 .direct-message-header-name {
   max-width: 100%;
