@@ -27,9 +27,9 @@ class NormalLoginForm extends React.Component {
             .then(r => r.json())
             .then(data => {
                 console.log(data);
-                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                localStorage.setItem('currentUserId', data.user.id);
                 localStorage.setItem('jwt', data.jwt);
-                console.log(this.props)
+                this.props.onSaveJWT(data.jwt, data.user.id)
                 this.props.history.push("/");
             })
       }

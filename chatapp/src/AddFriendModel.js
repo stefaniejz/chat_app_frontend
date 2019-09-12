@@ -25,7 +25,7 @@ class AddFriendModel extends Component {
     onHandleChooseFriend = (value, option) => {
         console.log(value)
         let friend = this.props.users.filter(user => user.username === value)[0]
-        fetch("http://localhost:3000/direct_channel?user_id=1&member_id=" + friend.id, {
+        fetch("http://localhost:3000/direct_channel?user_id=" + this.props.currentUserId + "&member_id=" + friend.id, {
             method: 'POST',
           }).then(r=>r.json())
         .then(channel=>{
@@ -39,7 +39,7 @@ class AddFriendModel extends Component {
     renderOptions = (users, searchText) => {
         console.log(users)
         return users
-                .filter(user => (user.username.includes(searchText) || searchText === "") && user.id !== 1)
+                .filter(user => (user.username.includes(searchText) || searchText === "") && user.id !== this.props.currentUserId)
                 .map( user =>
                     {
               

@@ -21,7 +21,8 @@ class Channel extends Component {
     this.last_message_ids = {}
     setInterval(() => {
       this.getMessageFetch(); 
-      this.getMembersFetch(); 
+      this.getMembersFetch();
+      this.props.refreshChannels();
      }, 1000);
   //    this.getMembersFetch(); 
   }
@@ -41,7 +42,7 @@ class Channel extends Component {
           method:'POST',
           body: JSON.stringify({
               content:inputValue,
-              user_id:1,
+              user_id:this.props.currentUserId,
               channel_id:this.props.match.params.channelId,
           }),
           headers:{
@@ -92,6 +93,7 @@ class Channel extends Component {
               users={this.props.users}
               history={this.props.history}
               refreshChannels={this.props.refreshChannels}
+              currentUserId={this.props.currentUserId}
             />
             <div id="primaryView" style={{ padding: 10, background: '#fff', height: this.props.primaryViewHeight, overflowY: 'auto' }}>
               <MessageList className="message-list" messages={this.state.messages}/>

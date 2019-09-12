@@ -24,6 +24,7 @@ class App extends React.Component {
     primaryViewHeight:"",
     last_message_id:0,
     jwt: null,
+    currentUserId: localStorage.getItem("currentUserId") ?  parseInt(localStorage.getItem("currentUserId")) : 1,
     users:[],
     modalVisible:false,
     channels: []
@@ -54,6 +55,7 @@ class App extends React.Component {
             users={this.state.users}
             modalVisible={this.state.modalVisible}
             refreshChannels={this.getChannelFetch}
+            currentUserId={this.state.currentUserId}
             {...routerProps}
             /> 
             </Layout>
@@ -75,6 +77,7 @@ class App extends React.Component {
             users={this.state.users}
             modalVisible={this.state.modalVisible}
             refreshChannels={this.getChannelFetch}
+            currentUserId={this.state.currentUserId}
             {...routerProps}
             /> 
             </Layout>
@@ -110,7 +113,7 @@ class App extends React.Component {
   }
    
   getChannelFetch=()=>{
-    fetch("http://localhost:3000/channels?user_id=1").then(res=>res.json())
+    fetch("http://localhost:3000/channels?user_id=" + this.state.currentUserId).then(res=>res.json())
     .then(data=>{
       if (!Array.isArray(data)) {
         return;
@@ -147,7 +150,7 @@ class App extends React.Component {
   convertToChannel = (channel) =>{
     return {
       id:channel.id,
-      name:channel.channel_type === "direct" ?  channel.members.filter(m => m.id != 1)[0].username : channel.name,
+      name:channel.channel_type === "direct" ?  channel.members.filter(m => m.id != this.state.currentUserId)[0].username : channel.name,
       member_count:channel.member_count,
       channel_type:channel.channel_type,
       members:channel.members
@@ -168,9 +171,10 @@ class App extends React.Component {
     });
   };
 
-  saveJWT = (jwt) => {
+  saveJWT = (jwt, currentUserId) => {
     this.setState({
-      jwt: jwt
+      jwt: jwt,
+      currentUserId: currentUserId
     })
   }
 }

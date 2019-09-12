@@ -25,6 +25,7 @@ import {
   
     handleSubmit = e => {
       e.preventDefault();
+      console.log('Received values of form: ');
       this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           console.log('Received values of form: ', values);
@@ -43,9 +44,6 @@ import {
             })
           })
             .then(r => r.json())
-            .then(json => {
-                this.props.onSaveJWT(json.jwt);
-            })
         }
       });
     };
@@ -107,7 +105,7 @@ import {
    
   
       return (
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+        <Form {...formItemLayout}>
           <Form.Item
             label={
               <span>
@@ -151,7 +149,7 @@ import {
 
 
           <Form.Item {...tailFormItemLayout}>
-            <Button onClick={this.handleRegister} type="primary" htmlType="submit">
+            <Button onClick={this.handleSubmit} type="primary" htmlType="submit">
               Register
             </Button>
           </Form.Item>
